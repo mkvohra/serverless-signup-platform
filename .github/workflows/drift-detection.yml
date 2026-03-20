@@ -1,0 +1,49 @@
+name: Terraform Drift Detection
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+
+  drift-check:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        environment: [dev, stage, prod]
+        component:
+          - iam
+          - networking
+          - database
+          - artifacts
+          - lambda
+          - api_gateway
+          - s3
+          - cloudfront
+
+    environment: ${{ matrix.environment }}
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PIPELINE_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - run: terraform init
+        working-directory: environments/${{ matrix.environment }}/${{ matrix.component }}
+
+      - run: terraform plan
+        working-directory: environments/${{ matrix.environment }}/${{ matrix.component }}

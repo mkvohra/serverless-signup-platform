@@ -1,0 +1,111 @@
+name: Terraform Deploy
+
+on:
+  push:
+    branches:
+      - dev
+      - stage
+    tags:
+      - "v*"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+
+jobs:
+
+  resolve-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+
+    steps:
+      - name: Resolve environment
+        id: set-env
+        run: |
+          if [[ "${GITHUB_REF}" == refs/heads/dev ]]; then
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF}" == refs/heads/stage ]]; then
+            echo "environment=stage" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "environment=prod" >> $GITHUB_OUTPUT
+          fi  
+  
+  
+  networking:
+
+    needs: resolve-environment
+    uses: ./.github/workflows/terraform-component.yml
+    with:
+      environment: ${{ needs.resolve-environment.outputs.environment }}
+      component: networking
+      action: apply
+
+
+  iam:
+
+    needs: [networking, resolve-environment]
+
+    uses: ./.github/workflows/terraform-component.yml
+    with:
+      environment: ${{ needs.resolve-environment.outputs.environment }}
+      component: iam
+      action: apply
+
+
+  database:
+
+    needs: [iam, resolve-environment]
+
+    uses: ./.github/workflows/terraform-component.yml
+    with:
+      environment: ${{ needs.resolve-environment.outputs.environment }}
+      component: database
+      action: apply
+
+
+  s3:
+
+    needs: [database, resolve-environment]
+
+    uses: ./.github/workflows/terraform-component.yml
+    with:
+      environment: ${{ needs.resolve-environment.outputs.environment }}
+      component: s3
+      action: apply
+
+
+  lambda:
+
+    needs: [s3, resolve-environment]
+
+    uses: ./.github/workflows/terraform-component.yml
+    with:
+      environment: ${{ needs.resolve-environment.outputs.environment }}
+      component: lambda
+      action: apply
+
+
+  api_gateway:
+
+    needs: [lambda, resolve-environment]
+
+    uses: ./.github/workflows/terraform-component.yml
+    with:
+      environment: ${{ needs.resolve-environment.outputs.environment }}
+      component: api_gateway
+      action: apply
+
+
+  cloudfront:
+
+    needs: [api_gateway, resolve-environment]
+
+    uses: ./.github/workflows/terraform-component.yml
+    with:
+      environment: ${{ needs.resolve-environment.outputs.environment }}
+      component: cloudfront
+      action: apply
