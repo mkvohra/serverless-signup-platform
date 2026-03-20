@@ -38,9 +38,12 @@ jobs:
 
       - name: build lambda package
         run: |
-          rm -rf lambda/package/*
+          rm -rf lambda/package
+          mkdir -p lambda/package
           pip install -r lambda/requirements.txt -t lambda/package
-          cp -r lambda/*.py lambda/package/
+          
+          cd lambda
+          cp *.py package/
 
 
       - name: Create Lambda zip
