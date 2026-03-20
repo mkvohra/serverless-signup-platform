@@ -36,15 +36,11 @@ jobs:
           python-version: "3.11"
 
 
-      - name: Install dependencies
-        run: |
-          pip install -r lambda/requirements.txt -t lambda/package
-
-
-      - name: Copy source files
+      - name: build lambda package
         run: |
           rm -rf lambda/package/*
-          cp -r lambda/* lambda/package/
+          pip install -r lambda/requirements.txt -t lambda/package
+          cp -r lambda/*.py lambda/package/
 
 
       - name: Create Lambda zip
