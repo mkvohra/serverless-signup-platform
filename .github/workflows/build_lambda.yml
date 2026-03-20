@@ -43,6 +43,7 @@ jobs:
 
       - name: Copy source files
         run: |
+          rm -rf lambda/package/*
           cp -r lambda/* lambda/package/
 
 
