@@ -1,0 +1,151 @@
+name: Terraform PR Plan
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - stage
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+  id-token: write
+
+jobs:
+
+# ------------------------------------------------
+# Resolve environment from PR target branch
+# ------------------------------------------------
+
+  resolve-environment:
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+
+    steps:
+
+      - name: Resolve environment
+        id: set-env
+        run: |
+          if [[ "${{ github.base_ref }}" == "dev" ]]; then
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.base_ref }}" == "stage" ]]; then
+            echo "environment=stage" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.base_ref }}" == "main" ]]; then
+            echo "environment=prod" >> $GITHUB_OUTPUT
+          fi
+
+
+# ------------------------------------------------
+# Detect changed components
+# ------------------------------------------------
+
+  detect-changes:
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        run: |
+          git diff --name-only \
+          ${{ github.event.pull_request.base.sha }} \
+          ${{ github.event.pull_request.head.sha }} > files.txt
+
+          echo "Changed files:"
+          cat files.txt
+
+
+      - name: Build component matrix
+        id: set-matrix
+        run: |
+
+          components=()
+
+          if grep -qE "modules/iam|environments/.*/iam" files.txt; then
+            components+=('"iam"')
+          fi
+
+          if grep -qE "modules/networking|environments/.*/networking" files.txt; then
+            components+=('"networking"')
+          fi
+
+          if grep -qE "modules/database|environments/.*/database" files.txt; then
+            components+=('"database"')
+          fi
+
+          if grep -qE "modules/lambda|environments/.*/lambda" files.txt; then
+            components+=('"lambda"')
+          fi
+
+          if grep -qE "modules/api_gateway|environments/.*/api_gateway" files.txt; then
+            components+=('"api_gateway"')
+          fi
+
+          if grep -qE "modules/s3|environments/.*/s3" files.txt; then
+            components+=('"s3"')
+          fi
+
+          if grep -qE "modules/cloudfront|environments/.*/cloudfront" files.txt; then
+            components+=('"cloudfront"')
+          fi
+
+          matrix=$(printf '[%s]' "$(IFS=,; echo "${components[*]}")")
+
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+
+          echo "Detected components:"
+          echo $matrix
+
+
+# ------------------------------------------------
+# Handle case where no infra changed
+# ------------------------------------------------
+
+  no-infra-change:
+
+    needs: detect-changes
+
+    if: needs.detect-changes.outputs.matrix == '[]'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: No infrastructure changes
+        run: echo "No Terraform components changed in this PR."
+
+
+# ------------------------------------------------
+# Run Terraform plans
+# ------------------------------------------------
+
+  terraform-plan:
+
+    needs: [resolve-environment, detect-changes]
+
+    if: needs.detect-changes.outputs.matrix != '[]'
+
+    strategy:
+      matrix:
+        component: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
+
+    uses: ./.github/workflows/terraform-component.yml
+
+    with:
+      environment: ${{ needs.resolve-environment.outputs.environment }}
+      component: ${{ matrix.component }}
+      action: plan
+
+

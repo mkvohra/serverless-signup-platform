@@ -12,3 +12,9 @@ variable "dynamodb_table_name" {
   description = "DynamoDB table for state locking"
   type        = string
 }
+
+
+variable "project" {
+  description = "project variable"
+  type        = string
+}
