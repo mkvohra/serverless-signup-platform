@@ -15,7 +15,7 @@ module "database" {
   env     = var.env
 
   private_subnet_ids      = data.terraform_remote_state.networking.outputs.private_subnet_ids
-  db_security_group_id    = data.terraform_remote_state.networking.outputs.db_security_group_id
+  db_security_group_id    = data.terraform_remote_state.networking.outputs.rds_sg_id
 
   db_name     = var.db_name
   db_username = var.db_username
