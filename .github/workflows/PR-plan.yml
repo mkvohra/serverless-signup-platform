@@ -57,9 +57,8 @@ jobs:
 
       - name: Get changed files
         run: |
-          git diff --name-only \
-          ${{ github.event.pull_request.base.sha }} \
-          ${{ github.event.pull_request.head.sha }} > files.txt
+          git fetch origin ${{github.base_ref}}
+          git diff --name-only origin/${{github.base_ref}} HEAD > files.txt
 
           echo "Changed files:"
           cat files.txt

@@ -22,7 +22,7 @@ env     = "dev"
 db_name     = "usersdb"
 db_username = "admin"
 
-api_name   = "user-api"
+api_name   = "user-api-dev-test"
 stage_name = "dev"
 
 bucket_name = "muskan-dev-frontend-bucket"
