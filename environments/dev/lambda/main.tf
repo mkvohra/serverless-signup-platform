@@ -45,8 +45,7 @@ module "lambda" {
   lambda_role_arn = data.terraform_remote_state.iam.outputs.lambda_role_arn
 
   artifact_bucket = var.artifact_bucket_name
-  artifact_key    = var.artifact_key
-
+  artifact_key    = dummy.zip
   lambda_subnet_ids        = data.terraform_remote_state.networking.outputs.private_subnet_ids
   lambda_security_group_id = data.terraform_remote_state.networking.outputs.lambda_sg_id
 
