@@ -3,7 +3,7 @@ data "terraform_remote_state" "s3" {
 
   config = {
     bucket = "terraform-state-bucket"
-    key    = "dev/s3_frontend/terraform.tfstate"
+    key    = "dev/s3/terraform.tfstate"
     region = "ap-south-1"
   }
 }
@@ -13,7 +13,7 @@ data "terraform_remote_state" "api" {
 
   config = {
     bucket = "terraform-state-bucket"
-    key    = "dev/api_gateway/terraform.tfstate"
+    key    = "dev/api/terraform.tfstate"
     region = "ap-south-1"
   }
 }

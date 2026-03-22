@@ -1,3 +1,4 @@
+/*
 resource "random_password" "db" {
   length  = 16
   special = true
@@ -49,3 +50,4 @@ resource "aws_db_instance" "this" {
     Name = "${var.project}-${var.env}-db"
   }
 }
+*/

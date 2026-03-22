@@ -47,7 +47,7 @@ jobs:
 
   iam:
 
-    needs: [networking, resolve-environment]
+    needs: [resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:
@@ -58,7 +58,7 @@ jobs:
 
   database:
 
-    needs: [iam, resolve-environment]
+    needs: [iam, networking, resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:
@@ -69,7 +69,7 @@ jobs:
 
   s3:
 
-    needs: [database, resolve-environment]
+    needs: [resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:
@@ -80,7 +80,7 @@ jobs:
 
   lambda:
 
-    needs: [s3, resolve-environment]
+    needs: [s3, iam, networking, database, resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:
@@ -102,7 +102,7 @@ jobs:
 
   cloudfront:
 
-    needs: [api_gateway, resolve-environment]
+    needs: [api_gateway, s3, resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:

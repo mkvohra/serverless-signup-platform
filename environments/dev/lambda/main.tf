@@ -4,7 +4,7 @@ data "terraform_remote_state" "networking" {
 
   config = {
     bucket = "ssp-terraform-state-project"
-    key    = "dev/networking/terraform.tfstate"
+    key    = "dev/network/terraform.tfstate"
     region = "ap-south-1"
   }
 
