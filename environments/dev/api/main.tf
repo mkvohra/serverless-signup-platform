@@ -2,7 +2,7 @@ data "terraform_remote_state" "lambda" {
   backend = "s3"
 
   config = {
-    bucket = "terraform-state-bucket"
+    bucket = "ssp-terraform-state-project"
     key    = "dev/lambda/terraform.tfstate"
     region = "ap-south-1"
   }
