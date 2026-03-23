@@ -62,16 +62,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r lambda/requirements.txt -t lambda/package
+         rm -rf lambda/package
+         mkdir -p lambda/package
+         pip install -r lambda/requirements.txt -t lambda/package
 
       - name: Copy source files
         run: |
-          cp -r lambda/* lambda/package/
+         cp -r lambda/src/* lambda/package/
 
       - name: Create Lambda zip
         run: |
-          cd lambda/package
-          zip -r ../lambda.zip .
+         cd lambda/package
+         zip -r ../lambda.zip .
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
