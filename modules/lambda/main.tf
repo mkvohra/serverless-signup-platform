@@ -26,10 +26,6 @@ resource "aws_lambda_function" "lambda" {
 
   }
 
-  depends_on = [
-    module.logging
-  ]
-
   environment {
     variables = {
       DB_SECRET_NAME = "${var.project}-${var.env}-db-credentials"

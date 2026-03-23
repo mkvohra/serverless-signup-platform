@@ -17,6 +17,9 @@ permissions:
 
 jobs:
 
+# resolving the environment
+
+
   resolve-environment:
     runs-on: ubuntu-latest
     outputs:
@@ -33,8 +36,60 @@ jobs:
           elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             echo "environment=prod" >> $GITHUB_OUTPUT
           fi  
+    
+ 
+
+   # building .zip and uploading lambda artifact
+
+
+
+  build-lambda:
+
+    needs: resolve-environment
+    runs-on: ubuntu-latest
+
+    environment: ${{ needs.resolve-environment.outputs.environment }}
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r lambda/requirements.txt -t lambda/package
+
+      - name: Copy source files
+        run: |
+          cp -r lambda/* lambda/package/
+
+      - name: Create Lambda zip
+        run: |
+          cd lambda/package
+          zip -r ../lambda.zip .
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PIPELINE_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Upload artifact to S3
+        run: |
+          ENV_NAME=${{ needs.resolve-environment.outputs.environment }}
+          aws s3 cp lambda/lambda.zip \
+          s3://${{ vars.LAMBDA_ARTIFACT_BUCKET }}/${ENV_NAME}/${{ github.sha }}.zip        
   
-  
+
+
+   # creating dependencies for ordered deployment
+
+
   networking:
 
     needs: resolve-environment
@@ -47,7 +102,7 @@ jobs:
 
   iam:
 
-    needs: [networking, resolve-environment]
+    needs: [resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:
@@ -58,7 +113,7 @@ jobs:
 
   database:
 
-    needs: [iam, resolve-environment]
+    needs: [iam, networking, resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:
@@ -69,7 +124,7 @@ jobs:
 
   s3:
 
-    needs: [database, resolve-environment]
+    needs: [resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:
@@ -80,7 +135,7 @@ jobs:
 
   lambda:
 
-    needs: [s3, resolve-environment]
+    needs: [build-lambda, s3, iam, networking, database, resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:
@@ -102,7 +157,7 @@ jobs:
 
   cloudfront:
 
-    needs: [api_gateway, resolve-environment]
+    needs: [api_gateway, s3, resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:

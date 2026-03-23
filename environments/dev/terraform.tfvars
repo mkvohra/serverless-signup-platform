@@ -26,7 +26,6 @@ api_name   = "user-api-dev-test"
 stage_name = "dev"
 
 bucket_name = "muskan-dev-frontend-bucket"
-artifact_bucket_name = "single-lambda-artifacts"
-
+artifact_bucket_name = "muskan-single-lambda-artifacts"
 
 oidc_provider_arn = "arn:aws:iam::364868684572:oidc-provider/token.actions.githubusercontent.com"

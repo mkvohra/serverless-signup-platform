@@ -2,8 +2,8 @@ data "terraform_remote_state" "s3" {
   backend = "s3"
 
   config = {
-    bucket = "terraform-state-bucket"
-    key    = "dev/s3_frontend/terraform.tfstate"
+    bucket = "ssp-terraform-state-project"
+    key    = "dev/s3/terraform.tfstate"
     region = "ap-south-1"
   }
 }
@@ -12,8 +12,8 @@ data "terraform_remote_state" "api" {
   backend = "s3"
 
   config = {
-    bucket = "terraform-state-bucket"
-    key    = "dev/api_gateway/terraform.tfstate"
+    bucket = "ssp-terraform-state-project"
+    key    = "dev/api/terraform.tfstate"
     region = "ap-south-1"
   }
 }
