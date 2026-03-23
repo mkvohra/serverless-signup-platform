@@ -16,3 +16,4 @@ module "api_gateway" {
   lambda_invoke_arn    = data.terraform_remote_state.lambda.outputs.lambda_invoke_arn
   lambda_function_name = data.terraform_remote_state.lambda.outputs.lambda_function_name
 }
+
