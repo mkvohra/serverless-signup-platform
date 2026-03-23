@@ -64,9 +64,18 @@ jobs:
       - name: Terraform Plan
         if: inputs.action == 'plan'
         run: |
-          terraform plan \
-          -var-file="../terraform.tfvars" \
-          -no-color | tee plan.txt
+          ENV_NAME=${{ inputs.environment }}
+
+          if [ "${{ inputs.component }}" = "lambda" ]; then
+            terraform plan \
+              -var-file="../terraform.tfvars" \
+              -var="artifact_key=${ENV_NAME}/placeholder.zip" \
+             -no-color | tee plan.txt
+          else
+            terraform plan \
+              -var-file="../terraform.tfvars" \
+              -no-color | tee plan.txt
+          fi
         working-directory: environments/${{ inputs.environment }}/${{ inputs.component }}
 
 

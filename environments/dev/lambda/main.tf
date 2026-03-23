@@ -9,7 +9,7 @@ data "terraform_remote_state" "networking" {
   }
 
 }
-
+/*
 data "terraform_remote_state" "database" {
 
   backend = "s3"
@@ -18,9 +18,10 @@ data "terraform_remote_state" "database" {
     bucket = "ssp-terraform-state-project"
     key    = "dev/database/terraform.tfstate"
     region = "ap-south-1"
-  }
+  } 
 
 }
+*/
 
 data "terraform_remote_state" "iam" {
 
@@ -45,7 +46,7 @@ module "lambda" {
   lambda_role_arn = data.terraform_remote_state.iam.outputs.lambda_role_arn
 
   artifact_bucket = var.artifact_bucket_name
-  artifact_key    = dummy.zip
+  artifact_key    = var.artifact_key
   lambda_subnet_ids        = data.terraform_remote_state.networking.outputs.private_subnet_ids
   lambda_security_group_id = data.terraform_remote_state.networking.outputs.lambda_sg_id
 
