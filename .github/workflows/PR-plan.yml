@@ -86,8 +86,8 @@ jobs:
             components+=('"lambda"')
           fi
 
-          if grep -qE "modules/api_gateway|environments/.*/api_gateway" files.txt; then
-            components+=('"api_gateway"')
+          if grep -qE "modules/api_gateway|environments/.*/api" files.txt; then
+            components+=('"api"')
           fi
 
           if grep -qE "modules/s3|environments/.*/s3" files.txt; then
