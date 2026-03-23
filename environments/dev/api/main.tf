@@ -9,7 +9,7 @@ data "terraform_remote_state" "lambda" {
 }
 
 module "api_gateway" {
-  source = "../../../modules/api_gateway"
+  source = "../../../modules/api"
 
   api_name             = var.api_name
   stage_name           = var.stage_name
