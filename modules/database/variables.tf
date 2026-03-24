@@ -5,6 +5,10 @@ variable "private_subnet_ids" {
   type = list(string)
 }
 
+variable "vpc_id" {
+  type = string
+}
+
 variable "db_security_group_id" {}
 
 variable "instance_class" {
@@ -13,3 +17,7 @@ variable "instance_class" {
 
 variable "db_name" {}
 variable "db_username" {}
+
+variable "lambda_sg_id" {}
+
+variable "bastion_sg_id" {}

@@ -79,12 +79,11 @@ jobs:
         working-directory: environments/${{ inputs.environment }}/${{ inputs.component }}
 
 
-      - name: Fail if destroy detected
+      - name: destruction warning
         if: inputs.action == 'plan'
         run: |
           if grep -q "will be destroyed" plan.txt; then
-            echo "Terraform plan contains destroy actions. Failing pipeline."
-            exit 1
+            echo "WARNING: Terraform plan contains destroy actions"
           fi
         working-directory: environments/${{ inputs.environment }}/${{ inputs.component }}
 

@@ -51,20 +51,6 @@ resource "aws_security_group" "lambda_sg" {
   }
 }
 
-resource "aws_security_group" "rds_sg" {
-  name        = var.rds_sg_name
-  description = "Security group for RDS"
-  vpc_id      = aws_vpc.this.id
-}
-
-resource "aws_security_group_rule" "rds_ingress_from_lambda" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.rds_sg.id
-  source_security_group_id = aws_security_group.lambda_sg.id
-}
 
 resource "aws_security_group" "secrets_endpoint_sg" {
   name        = var.secrets_endpoint_sg_name

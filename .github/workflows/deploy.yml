@@ -88,6 +88,7 @@ jobs:
           s3://${{ vars.LAMBDA_ARTIFACT_BUCKET }}/${ENV_NAME}/${{ github.sha }}.zip        
   
 
+   
 
    # creating dependencies for ordered deployment
 
@@ -102,6 +103,18 @@ jobs:
       action: apply
 
 
+   # bastion job
+
+  bastion:
+
+    needs: [networking, resolve-environment]
+    uses: ./.github/workflows/terraform-component.yml
+    with:
+      environment: ${{ needs.resolve-environment.outputs.environment }}
+      component: bastion
+      action: apply
+      
+
   iam:
 
     needs: [resolve-environment]
@@ -115,7 +128,7 @@ jobs:
 
   database:
 
-    needs: [iam, networking, resolve-environment]
+    needs: [iam, networking, bastion, resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
     with:

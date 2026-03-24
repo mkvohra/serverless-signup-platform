@@ -14,10 +14,6 @@ output "lambda_sg_id" {
   value = module.network.lambda_sg_id
 }
 
-output "rds_sg_id" {
-  value = module.network.rds_sg_id
-}
-
 output "secrets_endpoint_sg_id" {
   value = module.network.secrets_endpoint_sg_id
 }
