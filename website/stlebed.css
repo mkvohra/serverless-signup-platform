@@ -1,0 +1,180 @@
+/* Global Settings */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Prevent scrollbars */
+    font-family: Arial, sans-serif;
+}
+
+/* Section 1 */
+.section1 {
+    display: flex;
+    height: 100vh;
+    background: linear-gradient(to bottom, #82796a, #5d5241);
+    color: white;
+    position: relative;
+    overflow: hidden; /* Prevent scrollbars */
+}
+
+.image {
+    margin-top: -110px;
+}
+
+.section1 .image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+    padding-left: 50px;
+    border-radius: 60px;
+}
+
+.section1 img.main-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-radius: 80px;
+    padding-top: -90px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section1 img.main-image:hover {
+    transform: scale(1.1); 
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.5), 0 0 25px 10px rgba(0, 0, 0, 0.3); 
+}
+
+.line {
+    width: 200px;
+    height: 500px;
+    margin-left: 100px;
+    margin-top: 80px;
+    z-index: 1;
+}
+
+.line p {
+    margin-left: -20px;
+    font-weight: 700;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 50px;
+    background: linear-gradient(to right, #5d5241, #1c1b18, #1c1b18);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Gallery */
+.section1 .gallery {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 20px;
+}
+
+.section1 .gallery img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 60px;
+    border: 2px solid white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section1 .gallery img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.5), 0 0 25px 10px rgba(0, 0, 0, 0.3); 
+}
+
+/* Navbar */
+.navbar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 15px;
+    background: linear-gradient(to bottom, #82796a, rgba(245, 245, 220, 0.8));
+    transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.navbar:hover {
+    width: 200px;
+}
+
+.navbar a {
+    text-decoration: none;
+    background-color: #5f5a4d;
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    position: relative;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.navbar a:hover {
+    transform: scale(1.1);
+    color: black;
+}
+
+.navbar a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    height: 2px;
+    width: 0;
+    background-color: yellow;
+    transition: width 0.3s ease;
+}
+
+.navbar a:hover::after {
+    width: 100%;
+}
+
+/* Section 2 */
+.section2 {
+    padding: 50px 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.section2 h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.services-list {
+    list-style-type: decimal;
+    padding-left: 40px;
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: left;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.services-list li {
+    margin-bottom: 15px;
+}
+
+.services-list li::marker {
+    color: #fff; /* Make the numbers white */
+}
+
+.services-list li:hover {
+    color: #ffbf00; /* Highlight service items on hover */
+    cursor: pointer;
+}

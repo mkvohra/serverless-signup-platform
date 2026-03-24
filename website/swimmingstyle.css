@@ -1,0 +1,225 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    
+    background: linear-gradient(to right, #7e7366, #cac6c0);
+}
+
+/* Navbar Styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to right, #7e7366, #cac6c0);
+    display: flex;
+    justify-content:space-evenly;
+    align-items: center;
+    height: 60px;
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 13px 30px;
+    border: black dotted;
+    margin: 0 20px;
+    position: relative;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #2e2824;
+    transform: scale(1.1);
+    border-radius: 40px;
+    filter: contrast(20%);
+    background: linear-gradient(to right, #7e7366, #cac6c0);
+}
+
+/* .navbar a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #2e2824;
+    transition: width 0.3s ease;
+} */
+
+/* .navbar a:hover::before {
+    width: 90%;
+} */
+
+/* Section 1 - Presentation Styling */
+.section1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('assets/images/swimmingpool/main1.jpg') no-repeat top left, 
+                url('assets/images/swimmingpool/main3.jpg') no-repeat top right,
+                url('assets/images/swimmingpool/main2.jpg') no-repeat center center;
+    background-size: 33% 100%, 33% 100%, 33% 100%; /* Three background images side by side */
+    background-attachment: fixed; /* Keep the background fixed while scrolling */
+    color: black;
+    border: #2e2824 dashed;
+    text-align: center;
+}
+
+.intro {
+    background: linear-gradient(to right, #7e7366, #cac6c0);
+    position: absolute;
+    top: 40%;
+    opacity: 0.7;
+    z-index: 1;
+    width: 60%;
+    border-radius: 50px;
+    border: black double 6px;
+    transition: transform 0.5s ease, filter 0.5s ease;
+}
+.intro:hover{
+    
+
+    transform: scale(1.1);
+    filter: brightness(2.2);
+
+}
+
+.section1 .intro h1 {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', Times, serif;
+   
+}
+
+.section1 .intro p {
+    font-size: 30px;
+    font-weight: 50px;
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: 'Times New Roman', Times, serif;
+   
+}
+
+/* Section 2 - Gallery Styling */
+.section2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 40px 0;
+    background: linear-gradient(to right, #645a4e, #d7cbbe);/* Light background for contrast */
+}
+/* .section2 h2{
+    font-size: 30px;
+    margin-top: 0px;
+} */
+
+/* Gallery container */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.gallery-item {
+    position: relative;
+}
+
+/* Gallery image styling */
+.gallery img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: #2e2824 double 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
+    transition: transform 0.3s ease, filter 0.5s ease, box-shadow 0.3s ease;
+    /* position: relative; */
+}
+
+/* Hover effects */
+.gallery img:hover {
+    transform: scale(1.15);
+    filter: brightness(1.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    filter: contrast(120%);
+}
+/* Label styling */
+.label {
+    position: absolute;
+    bottom: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    color: white;
+    font-size: 15px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    padding: 16px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 250px;
+    text-align: center;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Show label on hover */
+.gallery-item:hover .label {
+    opacity: 1; /* Make the label visible when the image is hovered */
+}
+
+@media (max-width: 768px) {
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Smaller images on tablets */
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery {
+        grid-template-columns: 1fr; /* Single column for small screens */
+    }
+}
+
+.dainty-text {
+    position: relative;
+    bottom: -38px; /* Adjust distance from the bottom */
+    left: 49%;
+    transform: translateX(-50%); /* Center the text horizontally */
+    font-family: 'Dancing Script', cursive; /* Italic font */
+    font-size: 35px; /* Adjust size as per your preference */
+    color: black; /* Text color */
+    font-style: italic;
+    opacity: 1;
+
+}
+/* Footer Styling */
+.footer {
+    background-color: #2f3e47;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    font-size: 16px;
+}
+
+.footer p {
+    margin: 0;
+}

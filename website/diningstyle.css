@@ -1,0 +1,212 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #6e4931, #e6c5a5);
+}
+
+/* Navbar Styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to right, teal, black); /* Gradient background */
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    height: 60px;
+    z-index: 10;
+    padding: 36px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Add subtle shadow for visibility */
+    border-bottom: #230902 double 5px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 15px 30px;
+    font-size: 23px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.navbar a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+}
+
+/* Section 1 Styling */
+.section1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 60px; /* Ensure navbar doesn't overlap */
+    height: calc(100vh - 60px); /* Adjust to fit viewport minus navbar height */
+    overflow: hidden;
+}
+
+/* Image Container */
+.image-container {
+    display: flex;
+    justify-content: space-between; /* Space between images and text */
+    align-items: center;
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto; /* Center the content */
+}
+
+/* Left and Right Images */
+.image {
+    flex: 1; /* Equal space for images */
+    margin: 0 20px; /* Space between the image and the text */
+    position: relative;
+    overflow: hidden;
+    border-radius: 55px;
+    border: #000 double 6px;
+    max-width: 600px; /* Increase max width for larger images */
+}
+
+.image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.image:hover img  {
+    transform: scale(1.25); /* Larger expansion on hover */
+    /* filter: blur(2px);  */
+    filter: saturate(3);
+
+    
+}
+
+/* Text Content */
+.text-content {
+    flex: 2; /* Allocate more space for text */
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #333;
+    font-size: 55px;
+    padding: 20px;
+    max-width: 500px; /* Limit width of the text area */
+}
+
+.text-content h2 {
+    margin-bottom: 15px;
+    font-size: 66px;
+    color: #552e10;
+}
+
+.text-content p {
+    font-size: 25px;
+    color: #2d1a14;
+}
+
+
+ /* Section 2 Styling */
+ .section2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 60px); /* Subtract navbar height */
+    padding: 20px;
+    background: linear-gradient(to right,  #b29d86, rgb(66, 58, 58));;
+}
+
+.section2 h2 {
+    font-size: 56px;
+    color: #000;
+    border-bottom: bisque dashed 4px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin-bottom: 60px;
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns for the menu */
+    gap: 80px;
+    max-width: 900px;
+    width: 100%;
+    height: 400px;
+    text-align: center;
+}
+
+.menu-item {
+    background: linear-gradient(to right, #e5c59e, #e0e0e0);
+    border-radius: 10px;
+    border: #230902 double 6px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menu-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.menu-item h3 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.menu-item p {
+    font-size: 22px;
+    color: #813d3c;
+    font-weight: bold;
+}
+
+
+/* Footer Styles */
+.footer {
+    background: linear-gradient(to right, teal, black); /* Cream color background */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 15px auto;
+    flex-wrap: wrap; /* Ensures the content wraps on smaller screens */
+}
+
+.footer-info {
+    font-size: 1.6rem;
+    color: white;
+}
+
+.footer-social {
+    display: flex;
+    gap: 15px;
+    background-color: #b29d86;
+    border-radius: 40px;
+    width: 255px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.social-icon-footer {
+    width: 70px; /* Smaller icons for footer */
+    height: 40px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.social-icon-footer:hover {
+    transform: scale(1.2); /* Slight enlargement on hover */
+}
