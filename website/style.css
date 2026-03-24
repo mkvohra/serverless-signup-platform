@@ -1,0 +1,479 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family:  "Franklin Ghotics Medium", Times, serif;
+    background-color:#4B2C20;
+}
+
+/* Import Dancing Script Font */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+/* Navbar Styles */
+.navbar {
+    background: linear-gradient(90deg, #fffaf0, #f8efd4); /* Cream gradient background */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border: #201818 double 4px;
+    padding: 10px 20px;
+}
+
+/* Navbar Container */
+.navbar-container {
+    display: flex;
+    justify-content:space-between; /* Space between left and right sections */
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Menu Links (Left Side) */
+.menu {
+    display: flex;
+    gap: 20px; /* Equal spacing between menu items */
+}
+
+.navbar-item {
+    font-size: 1.3rem;
+    color: #333;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 5px 10px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar-item:hover {
+    color: white;
+    background-color: rgb(236, 195, 142);
+    border-radius: 20px;
+}
+
+/* Social Icons (Right Side) */
+.social-icons {
+    display: flex;
+    gap: 35px; /* Equal spacing between icons */
+}
+
+.social-icon {
+    width: 44px; /* Adjusted size for the icons */
+    height: 34px;
+    object-fit: contain; /* Ensures the image scales properly */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.social-icon:hover {
+    transform: scale(1.2); /* Slight enlargement on hover */
+}
+
+
+
+/* Section 1 */
+.section1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: -9-00px;
+    background: linear-gradient(90deg,#4B2C20, #F5F5DC,#4B2C20 ); /* Dark Brown to Cream gradient */
+    height: 100vh;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.text-section {
+    max-width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-right: 80px; /* Bring it closer to the center by adjusting the margin */
+}
+
+.meet-text, .luxurease-text, .address {
+    font-family: 'Dancing Script', cursive; /* Apply Dancing Script font */
+    
+}
+
+.meet-text {
+    font-size: 70px;
+    color: black;
+    font-style: italic;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif ;
+    margin-top: -160px; /* Reduced gap between 'meet me at' and 'luxurease' */
+    margin-left: 160px; /* Shift text to the right */
+    
+}
+
+.luxurease-text {
+    font-size: 82px;
+    font-style: italic;
+    color: black;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    border-style:dotted;
+    border-color: #201818;
+    z-index: 12;
+    padding: 20px;
+    border-radius: 80px 10px 80px 10px;
+    margin-top: -40px; /* Reduced gap from 'meet me at' */
+    margin-left: 140px; /* Shift text to the right */
+}
+
+.address {
+    font-size: 40px;
+    font-style: italic;
+    color: black;
+    margin-top: -10px; /* Reduced gap above address */
+    margin-left: 140px; /* Shift text to the right */
+}
+
+/* Image Section */
+.image-section {
+    width: 50%; /* Adjusted width for image */
+    display: flex;
+    justify-content: center;
+    margin-top: -30px; /* Shift the image upwards by 30px */
+}
+
+.image-section img {
+    width: 650px;
+    height: 80vh;
+    border-radius: 25px;
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-style:groove;
+}
+
+.image-section img:hover {
+    transform: scale(1.06);
+    filter: saturate(2);
+    /* Black and cream gradient glow with increased range */
+    box-shadow: 0 0 30px 15px rgba(0, 0, 0, 0.8), 0 0 40px 20px rgba(255, 253, 208, 0.7);
+}
+
+
+/* First section */
+.first-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(45deg, #d2b48c, #fff5e1); /* Brownish, whitish gradient */
+    padding: 40px;
+    height: 500px; /* Adjust the height to prevent overflow */
+    overflow: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Left text */
+.text-left {
+    flex-basis: 30%; /* Ensure this section takes 30% width */
+    text-align: left;
+}
+
+.title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 30px;
+    color: black;
+    margin-bottom: 0;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 1s ease-in-out; /* Fade-in transition */
+}
+
+.subtitle {
+    font-family: 'Dancing Script', cursive;
+    font-size: 60px;
+    color: black;
+    margin-top: 0;
+}
+
+/* Image container */
+.image-container {
+    position: relative;
+    flex-grow: 1; /* Allow the image container to take up remaining space */
+    height: 100%; /* Ensure it fits within the section */
+    overflow: hidden; /* Prevent horizontal scroll from the image container */
+}
+
+/* Image styling */
+.right-image {
+    width: 100%; /* Make image take up full width of the container */
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Image label styling */
+.image-label {
+    position: absolute;
+    top: 50%;
+    right: -100%; /* Initially positioned off-screen to the right */
+    transform: translateY(-50%);
+    font-family: 'Dancing Script', cursive;
+    font-size: 28px;
+    color: black;
+    font-style: italic;
+    transition: right 1s ease-in-out; /* Smooth sliding effect */
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    white-space: nowrap; /* Ensure the text doesn't wrap */
+}
+
+/* Hover effect on image */
+.image-container:hover .image-label {
+    right: 10px; /* Move the label inside the container */
+}
+
+.first-section:hover .title {
+    opacity: 1; /* Fade in the title when hovered */
+}
+
+
+/* Position the new text at the bottom center */
+.daity-text {
+    position: absolute;
+    bottom: 20px; /* Adjust distance from the bottom */
+    left: 50%;
+    transform: translateX(-50%); /* Center the text horizontally */
+    font-family: 'Dancing Script', cursive; /* Italic font */
+    font-size: 35px; /* Adjust size as per your preference */
+    color: black; /* Text color */
+    font-style: italic;
+    opacity: 1;
+    border-bottom: groove;
+}
+
+.logo{
+    position: relative;
+    bottom: 20px;
+    height: 0px; /* Adjust distance from the bottom */
+    margin-bottom: 100px;
+    opacity: 0.4;
+    left: 10%;
+    transform: translateX(-35%);
+    transform: translateY(100%);
+    z-index: 1;
+}
+
+
+
+
+
+/* General Section Style */
+.section2 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 50px;
+    background: linear-gradient(90deg, #F5F5DC, #4B2C20); /* Cream to Dark Brown gradient */
+    height: 100vh;
+    box-sizing: border-box;
+    position: relative; /* Prevents overlapping of sections */
+    overflow: hidden; /* Ensures no overflow */
+    border-bottom: #4B2C20 dotted;
+}
+
+/* Image Section for Second Section */
+.section2 .image-section {
+    width: 45%;
+    display: flex;
+    justify-content: flex-start; /* Align image to the left */
+}
+
+.section2 .image-section img {
+    width: 100%;
+    height: 80vh;
+    border-radius: 25px;
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-style:groove;
+    
+}
+
+
+
+/* Text Section for Second Section */
+.section2 .text-section {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align text to the left */
+    justify-content: center;
+    padding-left: 10px; /* Add some spacing from the image */
+    text-align: center;
+}
+
+.section2 .section-title{
+    font-size: 85px;
+    font-weight:500;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #4B2C20; /* Dark brown text */
+    margin-top:-130px;
+    position: relative;
+    transform: translateX(200px);
+    text-align: left;
+    z-index: 12;
+}
+
+.section2 .section-description {
+    font-size: 35px;
+    font-style:normal;
+    color: #000; /* Black text */
+    line-height: 1.6;
+    z-index: 1000;
+    position: relative;
+    transform: translateX(200px); /* Move downward for V-shape */
+    text-align: left;
+    margin-top: -30px; /* Add some spacing */
+    background: linear-gradient(to right, black,#855c2d, #371702de,#6F4F28 );
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+
+
+
+
+/* Footer Styles */
+.footer {
+    background-color: #97704f; /* Cream color background */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 15px auto;
+    flex-wrap: wrap; /* Ensures the content wraps on smaller screens */
+}
+
+.footer-info {
+    font-size: 1.6rem;
+    color: #333;
+}
+
+.footer-social {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.social-icon-footer {
+    width: 40px; /* Smaller icons for footer */
+    height: 40px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.social-icon-footer:hover {
+    transform: scale(1.2); /* Slight enlargement on hover */
+}
+
+
+
+
+/* 3rd Section Styles */
+.section3 {
+    background-color: #8b6c5c; /* White background */
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.section-titles {
+    font-size: 2.5rem;
+    color: #3d251e;
+    margin-bottom: 40px;
+    font-weight: bold;
+    border-style: double;
+    border-radius: 30px;
+}
+
+/* Flexbox Container */
+.flex-container {
+    display: flex;
+    justify-content: space-between; /* Equal gaps between items */
+    gap: 20px; /* No gap between flex items */
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap; /* Allow items to wrap if the screen is smaller */
+}
+
+/* Flexbox Items */
+.flex-item {
+    flex: 1 1 calc(33.333% - 20px);  /* Make each item take equal width */
+    position: relative;
+    overflow: hidden; /* Hide anything outside the flex item */
+    border-radius: 12px;
+    height: 670px;
+    border: #3d251e double 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.4s ease-out; /* Ensure smooth transition for scale effect */
+}
+
+.flex-item a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.flex-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fully covers the area */
+    display: block;
+    transition: transform 0.4s ease-out; /* Ensure smooth transition for image scaling */
+}
+
+.flex-item:hover .flex-image {
+    transform: scale(1.15); /* Slight zoom effect on hover */
+    filter: blur(2px);
+    
+}
+
+.flex-caption  {
+  position: relative;
+  bottom:370px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4c3228;
+  color: white;
+  font-size: 1.5rem;
+  padding: 20px 30px;
+  border-radius:95px;
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+}
+
+.flex-item:hover .flex-caption {
+    opacity: 0.7; /* Show caption on hover */
+}
+
+/* Additional styling to remove extra space at the edges */
+.flex-container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.flex-item:first-child {
+    margin-left: 0; /* Remove left margin for the first item */
+}
+
+.flex-item:last-child {
+    margin-right: 0; /* Remove right margin for the last item */
+}
+.last-text {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%); /* Center the text horizontally */
+    font-family: 'Dancing Script', cursive; /* Italic font */
+    font-size: 35px; /* Adjust size as per your preference */
+    color: black; /* Text color */
+    font-style: italic;
+    margin-bottom: -10px;
+    opacity: 1;
+}

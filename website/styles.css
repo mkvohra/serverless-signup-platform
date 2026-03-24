@@ -1,0 +1,210 @@
+/* General Styling */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #cebaab;
+    padding: 15px;
+    border-radius: 50px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    border: #040000 dashed;
+    border-width: 2px;
+}
+
+.navbar-item a {
+    color: black;
+    text-decoration: none;
+    font-size: xx-large;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.navbar-item a:hover {
+    color:#914205 ;
+}
+
+/* About Section */
+.about-section {
+    padding: 60px 40px;
+    text-align: center;
+    background-color: #937A62;
+    border-radius: 50px;
+}
+
+/* Header Section */
+.about-header h1 {
+    font-size: 4rem;
+    color: #4b3621;
+    margin-bottom: 10px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+.about-header p {
+    font-size: 1.5rem;
+    color: #331e07;
+}
+
+/* Our Story */
+.about-story {
+    display: flex;
+    justify-content:space-around;
+    margin-top: 0px;
+    align-items: center;
+  
+}
+
+.story-text {
+    width: 50%;
+    text-align: left;
+    padding-right: 10px;
+    font-weight: 400;
+    font-size: 25px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    
+}
+
+.story-text h2 {
+    font-size: 2.5rem;
+    color: #4b3621;
+    transform: translateX(40px);
+    margin-top: 0px;
+    border-bottom: #0e0707 dashed;
+}
+
+.story-image img {
+    width: 100%;
+    height: 700px;
+    border-radius: 80px;
+    border-style: dashed;
+    
+}
+
+/* Team Section */
+.about-team {
+    margin-top: 80px;
+    text-align: center;
+}
+
+.about-team h2 {
+    font-size: 3rem;
+    color: #040000;
+    border-bottom: #0e0707 dashed;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.about-team p {
+     font-size: larger;
+     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+.team-members {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.team-member {
+    width: 200px;
+    text-align: center;
+}
+
+.team-member img {
+    width: 100%;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.team-member h3 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #0e0707;
+}
+
+.team-member p {
+   color: #0e0707;
+   font-size: larger;
+   font-family: 'Times New Roman', Times, serif;
+
+}
+
+/* Vision & Values */
+.about-vision {
+    margin-top: 80px;
+    background-color: #cebaab;
+    padding: 40px;
+}
+
+.about-vision h2 {
+    font-size: 2.5rem;
+    color: black;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin-bottom: 30px;
+}
+
+.vision-content {
+    display: flex;
+    justify-content: space-between;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    gap: 30px;
+}
+
+.vision-text {
+    width: 48%;
+    text-align: left;
+    font-size: larger;
+    font-weight: 600;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.vision-text h3 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.vision-text p {
+    font-size: 1rem;
+    color: black;
+}
+
+.vision-text ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.vision-text ul li {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+/* Footer */
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Prevent scroll bar by handling overflow */
+body {
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    overflow-y: auto; /* Allow vertical scrolling if needed */
+}
