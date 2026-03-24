@@ -11,5 +11,5 @@ output "secret_arn" {
 }
 
 output "rds_sg_id" {
-  value = module.network.rds_sg_id
+  value = module.database.rds_sg_id
 }
