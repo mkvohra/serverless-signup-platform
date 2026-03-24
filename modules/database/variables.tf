@@ -9,7 +9,6 @@ variable "vpc_id" {
   type = string
 }
 
-variable "db_security_group_id" {}
 
 variable "instance_class" {
   default = "db.t3.micro"
