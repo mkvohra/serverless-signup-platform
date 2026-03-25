@@ -1,3 +1,6 @@
+# -----------------------
+# CloudFront Origin Access Control for S3
+# -----------------------
 resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "s3-oac"
   description                       = "Allow CloudFront access to S3"
@@ -6,6 +9,9 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_protocol                  = "sigv4"
 }
 
+# -----------------------
+# CloudFront Distribution (only S3)
+# -----------------------
 resource "aws_cloudfront_distribution" "cdn" {
   enabled             = true
   default_root_object = "index.html"
@@ -18,21 +24,6 @@ resource "aws_cloudfront_distribution" "cdn" {
     origin_id   = "s3-origin"
 
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
-  }
-
-  # -----------------------
-  # API Gateway origin
-  # -----------------------
-  origin {
-    domain_name = replace(var.api_gateway_endpoint, "https://", "")
-    origin_id   = "api-origin"
-
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "https-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
-    }
   }
 
   # -----------------------
@@ -54,31 +45,9 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   # -----------------------
-  # Ordered cache behavior (API)
+  # No API ordered cache behavior
   # -----------------------
-  ordered_cache_behavior {
-    path_pattern           = "/api/*"
-    target_origin_id       = "api-origin"
-    viewer_protocol_policy = "redirect-to-https"
-
-    allowed_methods = ["GET","HEAD","OPTIONS","PUT","POST","PATCH","DELETE"]
-    cached_methods  = ["GET","HEAD"]
-
-    forwarded_values {
-      query_string = true
-      cookies {
-        forward = "all"
-      }
-    }
-
-    # -----------------------
-    # Function for path rewrite
-    # -----------------------
-    function_association {
-      event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.api_rewrite.arn
-    }
-  }
+  # (Removed everything related to /api/*)
 
   restrictions {
     geo_restriction {
@@ -92,26 +61,7 @@ resource "aws_cloudfront_distribution" "cdn" {
 }
 
 # -----------------------
-# CloudFront function for API rewrite
-# -----------------------
-resource "aws_cloudfront_function" "api_rewrite" {
-  name    = "dev-api-path-rewrite"
-  runtime = "cloudfront-js-1.0"
-
-  code = <<EOF
-function handler(event) {
-    var request = event.request;
-    if (request.uri.startsWith("/api")) {
-        // prepend /dev to match API Gateway stage
-        request.uri = "/dev" + request.uri.replace(/^\\/api/, "");
-    }
-    return request;
-}
-EOF
-}
-
-# -----------------------
-# S3 bucket policy
+# S3 bucket policy for CloudFront
 # -----------------------
 resource "aws_s3_bucket_policy" "allow_cloudfront" {
   bucket = replace(var.s3_bucket_arn, "arn:aws:s3:::", "")
@@ -136,3 +86,8 @@ resource "aws_s3_bucket_policy" "allow_cloudfront" {
     ]
   })
 }
+
+# -----------------------
+# Remove CloudFront function (no API rewrite needed)
+# -----------------------
+# (Delete the aws_cloudfront_function.api_rewrite resource)
