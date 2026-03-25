@@ -22,6 +22,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   origin {
     domain_name = replace(var.api_gateway_endpoint, "https://", "")
     origin_id   = "api-origin"
+    origin_path = "/dev"
 
     custom_origin_config {
       http_port              = 80
@@ -52,7 +53,6 @@ resource "aws_cloudfront_distribution" "cdn" {
   ordered_cache_behavior {
 
     path_pattern     = "/api/*"
-    origin_path = "/dev"
     target_origin_id = "api-origin"
 
     viewer_protocol_policy = "redirect-to-https"
