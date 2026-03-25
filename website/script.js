@@ -1,7 +1,7 @@
 console.log("JS LOADED");
 
 document.getElementById("signupForm").addEventListener("submit", async function(e) {
-    console.log("FORM SUBMITTED")
+    console.log("FORM SUBMITTED");
     e.preventDefault();
 
     const username = document.getElementById("username").value;
@@ -9,7 +9,7 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     const password = document.getElementById("password").value;
 
     try {
-        const res = await fetch("/api/signup", {
+        const res = await fetch("https://tbcqji2kw1.execute-api.ap-south-1.amazonaws.com/dev/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -21,8 +21,8 @@ document.getElementById("signupForm").addEventListener("submit", async function(
             })
         });
 
-        const data = await res.json();
-        const result = JSON.parse(data.body);
+        // res.json() now gives the object directly
+        const result = await res.json();
 
         document.getElementById("status-message").innerText =
             result.message || result.error;
