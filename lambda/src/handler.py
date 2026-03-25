@@ -119,32 +119,46 @@ def lambda_handler(event, context):
     # POST (create)
     # -------------------------
     if method == "POST":
-        body = json.loads(event["body"])
+       try:
+           # Safe body parsing
+           if isinstance(event.get("body"), str):
+            body = json.loads(event["body"])
+           else:
+            body = event.get("body", {})
 
-        username = body["username"]
-        email = body["email"]
-        password = body["password"]
-        
-        if not username or not email or not password:
-            return response(400, {"error": "username, email and password are required"})
+           username = body.get("username")
+           email = body.get("email")
+           password = body.get("password")
 
-        if not is_valid_email(email):
-            return response(400, {"error": "Invalid email format"})
+           if not username or not email or not password:
+               return response(400, {"error": "username, email and password are required"})
 
-        if len(password) < 8:
-            return response(400, {"error": "Password must be at least 8 characters"})
-        password_hash = hashlib.sha256(password.encode()).hexdigest()
+           if not is_valid_email(email):
+               return response(400, {"error": "Invalid email format"})
 
-        cursor.execute(
-            """
-            INSERT INTO users (username, email, password_hash)
-            VALUES (%s, %s, %s)
-            """,
-            (username, email, password_hash)
-        )
-        conn.commit()
+           if len(password) < 8:
+               return response(400, {"error": "Password must be at least 8 characters"})
 
-        return response(201, {"message": "User created"})
+           password_hash = hashlib.sha256(password.encode()).hexdigest()
+
+           cursor.execute(
+               """
+               INSERT INTO users (username, email, password_hash)
+               VALUES (%s, %s, %s)
+               """,
+               (username, email, password_hash)
+           )
+           conn.commit()
+
+           return response(201, {"message": "User created"})
+
+       except pymysql.err.IntegrityError as e:
+           logger.error(f"Integrity error: {str(e)}")
+           return response(400, {"error": "Email already exists"})
+
+       except Exception as e:
+           logger.error(f"Unexpected error: {str(e)}")
+           return response(500, {"error": "Internal server error"})
 
     # -------------------------
     # PUT (update)
