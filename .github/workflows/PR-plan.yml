@@ -70,6 +70,10 @@ jobs:
 
           components=()
 
+          if grep -qE "modules/bastion|environments/.*/bastion" files.txt; then
+            components+=('"bastion"')
+          fi
+
           if grep -qE "modules/iam|environments/.*/iam" files.txt; then
             components+=('"iam"')
           fi

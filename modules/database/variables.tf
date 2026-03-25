@@ -5,7 +5,10 @@ variable "private_subnet_ids" {
   type = list(string)
 }
 
-variable "db_security_group_id" {}
+variable "vpc_id" {
+  type = string
+}
+
 
 variable "instance_class" {
   default = "db.t3.micro"
@@ -13,3 +16,7 @@ variable "instance_class" {
 
 variable "db_name" {}
 variable "db_username" {}
+
+variable "lambda_sg_id" {}
+
+variable "bastion_sg_id" {}

@@ -9,3 +9,7 @@ output "db_port" {
 output "secret_arn" {
   value = module.database.secret_arn
 }
+
+output "rds_sg_id" {
+  value = module.database.rds_sg_id
+}
