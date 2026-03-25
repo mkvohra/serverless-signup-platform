@@ -22,6 +22,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   origin {
     domain_name = replace(var.api_gateway_endpoint, "https://", "")
     origin_id   = "api-origin"
+    origin_path = "/dev"
 
     custom_origin_config {
       http_port              = 80

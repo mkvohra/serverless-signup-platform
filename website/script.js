@@ -1,14 +1,15 @@
+console.log("JS LOADED");
+
 document.getElementById("signupForm").addEventListener("submit", async function(e) {
+    console.log("FORM SUBMITTED")
     e.preventDefault();
 
     const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const statusMsg = document.getElementById("status-message");
-
     try {
-        const response = await fetch("/api/signup", {
+        const res = await fetch("/api/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -20,15 +21,15 @@ document.getElementById("signupForm").addEventListener("submit", async function(
             })
         });
 
-        const data = await response.json();
+        const data = await res.json();
+        const result = JSON.parse(data.body);
 
-        if (response.ok) {
-            statusMsg.innerText = "Signup successful!";
-        } else {
-            statusMsg.innerText = data.error || "Signup failed";
-        }
+        document.getElementById("status-message").innerText =
+            result.message || result.error;
 
-    } catch (error) {
-        statusMsg.innerText = "Something went wrong";
+    } catch (err) {
+        console.error(err);
+        document.getElementById("status-message").innerText =
+            "Something went wrong";
     }
 });
