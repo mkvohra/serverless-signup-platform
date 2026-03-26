@@ -90,7 +90,7 @@ jobs:
             components+=('"lambda"')
           fi
 
-          if grep -qE "modules/api_gateway|environments/.*/api" files.txt; then
+          if grep -qE "modules/api|environments/.*/api" files.txt; then
             components+=('"api"')
           fi
 
