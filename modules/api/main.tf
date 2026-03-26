@@ -27,6 +27,40 @@ resource "aws_apigatewayv2_route" "signup_route" {
   target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
+resource "aws_apigatewayv2_route" "get_all_users" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "GET /"
+
+  target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+
+resource "aws_apigatewayv2_route" "get_user_by_id" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "GET /{id}"
+
+  target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+
+resource "aws_apigatewayv2_route" "update_user" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "PUT /{id}"
+
+  target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+
+resource "aws_apigatewayv2_route" "delete_user" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "DELETE /{id}"
+
+  target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+
+
+
 resource "aws_apigatewayv2_stage" "api_stage" {
   api_id      = aws_apigatewayv2_api.http_api.id
   name        = var.stage_name
