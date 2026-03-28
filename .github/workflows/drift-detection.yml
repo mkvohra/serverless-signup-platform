@@ -23,7 +23,6 @@ jobs:
           - iam
           - networking
           - database
-          - artifacts
           - lambda
           - api_gateway
           - s3
