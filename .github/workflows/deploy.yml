@@ -156,6 +156,34 @@ jobs:
       environment: ${{ needs.resolve-environment.outputs.environment }}
       component: s3
       action: apply
+  
+
+  frontend:
+    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
+
+    needs: [s3, resolve-environment]
+    runs-on: ubuntu-latest
+
+    environment: ${{ needs.resolve-environment.outputs.environment }}
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PIPELINE_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Upload frontend to S3
+        run: |
+          ENV_NAME=${{ needs.resolve-environment.outputs.environment }}
+
+          aws s3 sync website/ \
+          s3://${{ vars.FRONTEND_BUCKET_NAME }} \
+          --delete
 
 
   lambda:
