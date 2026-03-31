@@ -7,5 +7,5 @@ variable "private_subnet_ids" {
 }
 
 variable "env" {
-  type = list(string)
+  type = string
 }
