@@ -21,6 +21,7 @@ data "terraform_remote_state" "api" {
 module "cloudfront" {
   source = "../../../modules/cloudfront"
 
+  env                  = var.env
   s3_bucket_domain     = data.terraform_remote_state.s3.outputs.bucket_regional_domain_name
   api_gateway_endpoint = data.terraform_remote_state.api.outputs.api_endpoint
   s3_bucket_arn        = data.terraform_remote_state.s3.outputs.bucket_arn

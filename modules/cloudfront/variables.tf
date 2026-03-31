@@ -8,3 +8,7 @@ variable "api_gateway_endpoint" {
 variable "s3_bucket_arn" {
   type = string
 }
+
+variable "env" {
+  type = string
+}
