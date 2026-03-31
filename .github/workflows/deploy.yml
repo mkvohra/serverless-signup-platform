@@ -224,3 +224,6 @@ jobs:
       environment: ${{ needs.resolve-environment.outputs.environment }}
       component: cloudfront
       action: apply
+
+
+      # just a comment to make changes or trigger stage env
