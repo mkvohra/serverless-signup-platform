@@ -80,6 +80,10 @@ resource "aws_vpc_endpoint" "secretsmanager" {
   ]
 
   private_dns_enabled = true
+
+  tags = {
+    Name = "${var.environment}-secretmanager-endpoint"
+  }
 }
 
 resource "aws_vpc_endpoint" "logs" {
@@ -94,4 +98,8 @@ resource "aws_vpc_endpoint" "logs" {
   ]
 
   private_dns_enabled = true
+
+  tags = {
+    Name = "${var.environment}-logs-endpoint"
+  }
 }
