@@ -29,7 +29,7 @@ module "database" {
   vpc_id                  = data.terraform_remote_state.networking.outputs.vpc_id
   private_subnet_ids      = data.terraform_remote_state.networking.outputs.private_subnet_ids
   lambda_sg_id            = data.terraform_remote_state.networking.outputs.lambda_sg_id
-  bastion_sg_id           = data.terraform_remote_state.bastion.outputs.bastion_sg_id
+  bastion_sg_id           = data.terraform_remote_state.bastion.outputs.bastion_sg_id 
 
   db_name     = var.db_name
   db_username = var.db_username
