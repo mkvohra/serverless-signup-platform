@@ -2,7 +2,7 @@
 
 
 resource "aws_iam_role" "bastion_role" {
-  name = "bastion-ssm-role"
+  name = "bastion-${var.env}-ssm-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -22,7 +22,7 @@ resource "aws_iam_role_policy_attachment" "ssm" {
 }
 
 resource "aws_iam_instance_profile" "bastion_profile" {
-  name = "bastion-instance-profile"
+  name = "bastion-${var.env}-instance-profile"
   role = aws_iam_role.bastion_role.name
 }
 
@@ -35,7 +35,7 @@ resource "aws_iam_instance_profile" "bastion_profile" {
 
 
 resource "aws_security_group" "bastion_sg" {
-  name   = "bastion-sg"
+  name   = "bastion-${var.env}-sg"
   vpc_id = var.vpc_id
 
   # no inbound rules
@@ -61,7 +61,7 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = false
 
   tags = {
-    Name = "bastion-ssm"
+    Name = "bastion-${var.env}-ssm"
   }
 }
 
@@ -70,7 +70,7 @@ resource "aws_instance" "bastion" {
 
 
 resource "aws_security_group" "endpoint_sg" {
-  name   = "ssm-endpoint-sg"
+  name   = "ssm-${var.env}-endpoint-sg"
   vpc_id = var.vpc_id
 
   ingress {

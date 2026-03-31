@@ -11,7 +11,7 @@ data "terraform_remote_state" "networking" {
 
 module "bastion" {
   source = "../../../modules/bastion"
-
+  env                = var.env
   vpc_id             = data.terraform_remote_state.networking.outputs.vpc_id
   private_subnet_ids = data.terraform_remote_state.networking.outputs.private_subnet_ids
 }
