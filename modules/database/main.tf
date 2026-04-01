@@ -5,7 +5,7 @@ resource "random_password" "db" {
 }
 
 resource "aws_secretsmanager_secret" "db" {
-  name = "${var.project}-${var.env}-dev-db-credentials"
+  name = "${var.project}-${var.env}-db-credential"
 }
 
 resource "aws_secretsmanager_secret_version" "db" {
