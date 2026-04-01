@@ -28,7 +28,7 @@ resource "aws_lambda_function" "lambda" {
 
   environment {
     variables = {
-      DB_SECRET_NAME = "${var.project}-${var.env}-dev-db-credentials"
+      DB_SECRET_NAME = "${var.project}-${var.env}-db-credential"
     }
   } 
 
