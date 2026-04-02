@@ -136,7 +136,7 @@ def lambda_handler(event, context):
             elif body is None:
                 body = {}
 
-            logger.info(f"Parsed body: {body}")
+            logger.info(f"Request {context.aws_request_id} → {body}")
 
             username = body.get("username")
             email = body.get("email")
