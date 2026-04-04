@@ -12,6 +12,10 @@ on:
       - "v*"
 
   workflow_dispatch:
+    inputs:
+      artifact_key:
+        description: "S3 key of artifact to deploy"
+        required: true
 
 permissions:
   contents: read
