@@ -28,7 +28,7 @@ jobs:
 
 
   resolve-environment:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     outputs:
      environment: ${{ steps.set-env.outputs.environment }}
@@ -56,7 +56,7 @@ jobs:
 
 
   build-lambda:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
 
     needs: resolve-environment
     runs-on: ubuntu-latest
@@ -107,7 +107,7 @@ jobs:
 
 
   networking:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
 
     needs: resolve-environment
     uses: ./.github/workflows/terraform-component.yml
@@ -120,8 +120,7 @@ jobs:
    # bastion job
 
   bastion:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
-
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
     needs: [networking, resolve-environment]
     uses: ./.github/workflows/terraform-component.yml
     with:
@@ -131,8 +130,7 @@ jobs:
       
 
   iam:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
-
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
     needs: [resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
@@ -143,8 +141,7 @@ jobs:
 
 
   database:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
-
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
     needs: [iam, networking, bastion, resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
@@ -155,8 +152,7 @@ jobs:
 
 
   s3:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
-
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
     needs: [resolve-environment]
 
     uses: ./.github/workflows/terraform-component.yml
@@ -167,8 +163,7 @@ jobs:
   
 
   frontend:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
-
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
     needs: [s3, resolve-environment]
     runs-on: ubuntu-latest
 
@@ -195,7 +190,7 @@ jobs:
 
 
   lambda:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
 
     needs: [build-lambda, s3, iam, networking, database, resolve-environment]
 
@@ -207,7 +202,7 @@ jobs:
 
 
   api_gateway:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
 
     needs: [lambda, resolve-environment]
 
@@ -219,7 +214,7 @@ jobs:
 
 
   cloudfront:
-    if: github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || startsWith(github.ref, 'refs/tags/')
 
     needs: [api_gateway, s3, resolve-environment]
 
