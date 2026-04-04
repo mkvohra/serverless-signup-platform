@@ -102,10 +102,21 @@ jobs:
           ENV_NAME=${{ inputs.environment }}
 
           if [ "${{ inputs.component }}" = "lambda" ]; then
+
+            # Decide which artifact to use
+            if [ -n "${{ github.event.inputs.artifact_key }}" ]; then
+              ARTIFACT="${{ github.event.inputs.artifact_key }}"
+              echo "Using manual artifact: $ARTIFACT"
+            else
+              ARTIFACT="${ENV_NAME}/${{ github.sha }}.zip"
+              echo "Using latest artifact: $ARTIFACT"
+            fi
+
             terraform apply \
               -var-file="../terraform.tfvars" \
-              -var="artifact_key=${ENV_NAME}/${{ github.sha }}.zip" \
+              -var="artifact_key=$ARTIFACT" \
               -auto-approve
+
           else    
             terraform apply \
               -var-file="../terraform.tfvars" \
