@@ -2,6 +2,7 @@ name: Terraform PR Plan
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
     branches:
       - dev
       - stage
@@ -59,9 +60,8 @@ jobs:
 
       - name: Get changed files
         run: |
-          git diff --name-only \
-          ${{ github.event.pull_request.base.sha }} \
-          ${{ github.event.pull_request.head.sha }} > files.txt
+          git fetch origin ${{github.base_ref}}
+          git diff --name-only origin/${{github.base_ref}} HEAD > files.txt
 
           echo "Changed files:"
           cat files.txt
@@ -72,6 +72,10 @@ jobs:
         run: |
 
           components=()
+
+          if grep -qE "modules/bastion|environments/.*/bastion" files.txt; then
+            components+=('"bastion"')
+          fi
 
           if grep -qE "modules/iam|environments/.*/iam" files.txt; then
             components+=('"iam"')
@@ -89,8 +93,8 @@ jobs:
             components+=('"lambda"')
           fi
 
-          if grep -qE "modules/api_gateway|environments/.*/api_gateway" files.txt; then
-            components+=('"api_gateway"')
+          if grep -qE "modules/api|environments/.*/api" files.txt; then
+            components+=('"api"')
           fi
 
           if grep -qE "modules/s3|environments/.*/s3" files.txt; then

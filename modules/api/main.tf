@@ -1,6 +1,15 @@
 resource "aws_apigatewayv2_api" "http_api" {
   name          = var.api_name
   protocol_type = "HTTP"
+
+
+  cors_configuration {
+    allow_origins = ["*"] 
+    allow_methods = ["POST", "OPTIONS", "GET", "PUT", "DELETE", "PATCH"]
+    allow_headers = ["Content-Type", "Authorization"]
+    expose_headers = ["Content-Type"]
+    max_age = 3600
+  }
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
@@ -17,6 +26,40 @@ resource "aws_apigatewayv2_route" "signup_route" {
 
   target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
+
+resource "aws_apigatewayv2_route" "get_all_users" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "GET /"
+
+  target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+
+resource "aws_apigatewayv2_route" "get_user_by_id" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "GET /{id}"
+
+  target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+
+resource "aws_apigatewayv2_route" "update_user" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "PUT /{id}"
+
+  target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+
+resource "aws_apigatewayv2_route" "delete_user" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "DELETE /{id}"
+
+  target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+
+
 
 resource "aws_apigatewayv2_stage" "api_stage" {
   api_id      = aws_apigatewayv2_api.http_api.id

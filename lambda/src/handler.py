@@ -7,13 +7,6 @@ import logging
 from datetime import datetime
 import re
 
-def is_valid_email(email: str) -> bool:
-    pattern = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
-    return re.match(pattern, email) is not None
-
-
-
-
 # ---------------------------------------------------
 # Logging
 # ---------------------------------------------------
@@ -25,6 +18,20 @@ logger.setLevel(logging.INFO)
 # ---------------------------------------------------
 _db_creds = None
 _db_conn = None
+
+# ---------------------------------------------------
+# Helpers
+# ---------------------------------------------------
+def is_valid_email(email: str) -> bool:
+    pattern = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
+    return re.match(pattern, email) is not None
+
+def response(status, body):
+    return {
+        "statusCode": status,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps(body, default=str)   # IMPORTANT FIX
+    }
 
 # ---------------------------------------------------
 # Secrets Manager
@@ -45,9 +52,8 @@ def get_db_creds():
     _db_creds = json.loads(response["SecretString"])
     return _db_creds
 
-
 # ---------------------------------------------------
-# DB Connection (reuse)
+# DB Connection
 # ---------------------------------------------------
 def get_connection():
     global _db_conn
@@ -57,6 +63,8 @@ def get_connection():
 
     creds = get_db_creds()
 
+    logger.info("Connecting to DB...")
+
     _db_conn = pymysql.connect(
         host=creds["DB_HOST"],
         user=creds["DB_USER"],
@@ -65,127 +73,157 @@ def get_connection():
         connect_timeout=5,
         cursorclass=pymysql.cursors.DictCursor
     )
+
+    logger.info("DB connection successful")
+
     return _db_conn
-
-
-# ---------------------------------------------------
-# Helpers
-# ---------------------------------------------------
-def response(status, body):
-    return {
-        "statusCode": status,
-        "headers": {"Content-Type": "application/json"},
-        "body": json.dumps(body, default=str)
-    }
-
 
 # ---------------------------------------------------
 # Lambda Handler
 # ---------------------------------------------------
 def lambda_handler(event, context):
-    logger.info("Lambda invoked")
-    logger.info(event)
+    request_id = context.aws_request_id
+
+    logger.info(f"[{request_id}] Lambda invoked")
+    logger.info(f"[{request_id}] Event: {json.dumps(event)}")
 
     method = event["requestContext"]["http"]["method"]
     path_params = event.get("pathParameters") or {}
 
-    conn = get_connection()
-    cursor = conn.cursor()
+    # -------------------------
+    # DB connection (SAFE)
+    # -------------------------
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+    except Exception as e:
+        logger.error(f"[{request_id}] DB connection error: {str(e)}")
+        return response(500, {"error": "Database connection failed"})
 
     # -------------------------
-    # GET (all / by id)
+    # GET
     # -------------------------
     if method == "GET":
-        if "id" in path_params:
-            user_id = int(path_params["id"])
-            cursor.execute(
-                "SELECT id, username, email, created_at FROM users WHERE id=%s",
-                (user_id,)
-            )
-            user = cursor.fetchone()
+        try:
+            if "id" in path_params:
+                user_id = int(path_params["id"])
+                cursor.execute(
+                    "SELECT id, username, email, created_at FROM users WHERE id=%s",
+                    (user_id,)
+                )
+                user = cursor.fetchone()
 
-            if not user:
-                return response(404, {"error": "User not found"})
+                if not user:
+                    return response(404, {"error": "User not found"})
 
-            return response(200, user)
+                return response(200, user)
 
-        cursor.execute(
-            "SELECT id, username, email, created_at FROM users"
-        )
-        users = cursor.fetchall()
-        return response(200, users)
+            cursor.execute("SELECT id, username, email, created_at FROM users")
+            users = cursor.fetchall()
+            return response(200, users)
+
+        except Exception as e:
+            logger.error(f"[{request_id}] GET error: {str(e)}")
+            return response(500, {"error": "Internal server error"})
 
     # -------------------------
-    # POST (create)
+    # POST (signup)
     # -------------------------
     if method == "POST":
-        body = json.loads(event["body"])
+        try:
+            # Safe body parsing
+            body = event.get("body")
+            if isinstance(body, str):
+                body = json.loads(body)
+            elif body is None:
+                body = {}
 
-        username = body["username"]
-        email = body["email"]
-        password = body["password"]
+            logger.info(f"[{request_id}] Parsed body → {body}")
+
+            username = body.get("username")
+            email = body.get("email")
+            password = body.get("password")
+
+            if not username or not email or not password:
+                return response(400, {"error": "username, email and password are required"})
+
+            if not is_valid_email(email):
+                return response(400, {"error": "Invalid email format"})
+
+            if len(password) < 8:
+                return response(400, {"error": "Password must be at least 8 characters"})
+
+            password_hash = hashlib.sha256(password.encode()).hexdigest()
+
+            logger.info(f"[{request_id}] Inserting user into DB")
+
+            cursor.execute(
+                """
+                INSERT INTO users (username, email, password_hash)
+                VALUES (%s, %s, %s)
+                """,
+                (username, email, password_hash)
+            )
+            conn.commit()
+            logger.info(f"[{request_id}] User created successfully")
+            return response(201, {"message": "User created"})
         
-        if not username or not email or not password:
-            return response(400, {"error": "username, email and password are required"})
 
-        if not is_valid_email(email):
-            return response(400, {"error": "Invalid email format"})
+        except pymysql.err.IntegrityError as e:
+            logger.error(f"Integrity error: {str(e)}")
+            return response(400, {"error": "Email already exists"})
 
-        if len(password) < 8:
-            return response(400, {"error": "Password must be at least 8 characters"})
-        password_hash = hashlib.sha256(password.encode()).hexdigest()
-
-        cursor.execute(
-            """
-            INSERT INTO users (username, email, password_hash)
-            VALUES (%s, %s, %s)
-            """,
-            (username, email, password_hash)
-        )
-        conn.commit()
-
-        return response(201, {"message": "User created"})
+        except Exception as e:
+            logger.error(f"[{request_id}] POST error: {str(e)}")
+            return response(500, {"error": "Internal server error"})
 
     # -------------------------
-    # PUT (update)
+    # PUT
     # -------------------------
     if method == "PUT":
-        if "id" not in path_params:
-            return response(400, {"error": "ID required"})
+        try:
+            if "id" not in path_params:
+                return response(400, {"error": "ID required"})
 
-        user_id = int(path_params["id"])
-        body = json.loads(event["body"])
+            user_id = int(path_params["id"])
+            body = json.loads(event["body"])
 
-        cursor.execute(
-            """
-            UPDATE users
-            SET username=%s, email=%s
-            WHERE id=%s
-            """,
-            (body["username"], body["email"], user_id)
-        )
-        conn.commit()
+            cursor.execute(
+                """
+                UPDATE users
+                SET username=%s, email=%s
+                WHERE id=%s
+                """,
+                (body["username"], body["email"], user_id)
+            )
+            conn.commit()
 
-        return response(200, {"message": "User updated"})
+            return response(200, {"message": "User updated"})
+
+        except Exception as e:
+            logger.error(f"[{request_id}] PUT error: {str(e)}")
+            return response(500, {"error": "Internal server error"})
 
     # -------------------------
     # DELETE
     # -------------------------
     if method == "DELETE":
-        if "id" not in path_params:
-            return response(400, {"error": "ID required"})
+        try:
+            if "id" not in path_params:
+                return response(400, {"error": "ID required"})
 
-        user_id = int(path_params["id"])
+            user_id = int(path_params["id"])
 
-        cursor.execute(
-            "DELETE FROM users WHERE id=%s",
-            (user_id,)
-        )
-        conn.commit()
+            cursor.execute(
+                "DELETE FROM users WHERE id=%s",
+                (user_id,)
+            )
+            conn.commit()
 
-        return response(200, {"message": "User deleted"})
+            return response(200, {"message": "User deleted"})
 
-    # -------------------------
-    # Unsupported
-    # -------------------------
+        except Exception as e:
+            logger.error(f"[{request_id}] DELETE error: {str(e)}")
+            return response(500, {"error": "Internal server error"})
+
     return response(405, {"error": "Method not allowed"})

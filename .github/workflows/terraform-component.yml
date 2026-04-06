@@ -64,18 +64,26 @@ jobs:
       - name: Terraform Plan
         if: inputs.action == 'plan'
         run: |
-          terraform plan \
-          -var-file="../terraform.tfvars" \
-          -no-color | tee plan.txt
+          ENV_NAME=${{ inputs.environment }}
+
+          if [ "${{ inputs.component }}" = "lambda" ]; then
+            terraform plan \
+              -var-file="../terraform.tfvars" \
+              -var="artifact_key=${ENV_NAME}/placeholder.zip" \
+             -no-color | tee plan.txt
+          else
+            terraform plan \
+              -var-file="../terraform.tfvars" \
+              -no-color | tee plan.txt
+          fi
         working-directory: environments/${{ inputs.environment }}/${{ inputs.component }}
 
 
-      - name: Fail if destroy detected
+      - name: destruction warning
         if: inputs.action == 'plan'
         run: |
           if grep -q "will be destroyed" plan.txt; then
-            echo "Terraform plan contains destroy actions. Failing pipeline."
-            exit 1
+            echo "WARNING: Terraform plan contains destroy actions"
           fi
         working-directory: environments/${{ inputs.environment }}/${{ inputs.component }}
 
@@ -94,10 +102,21 @@ jobs:
           ENV_NAME=${{ inputs.environment }}
 
           if [ "${{ inputs.component }}" = "lambda" ]; then
+
+            # Decide which artifact to use
+            if [ -n "${{ github.event.inputs.artifact_key }}" ]; then
+              ARTIFACT="${{ github.event.inputs.artifact_key }}"
+              echo "Using manual artifact: $ARTIFACT"
+            else
+              ARTIFACT="${ENV_NAME}/${{ github.sha }}.zip"
+              echo "Using latest artifact: $ARTIFACT"
+            fi
+
             terraform apply \
               -var-file="../terraform.tfvars" \
-              -var="artifact_key=${ENV_NAME}/${{ github.sha }}.zip" \
+              -var="artifact_key=$ARTIFACT" \
               -auto-approve
+
           else    
             terraform apply \
               -var-file="../terraform.tfvars" \

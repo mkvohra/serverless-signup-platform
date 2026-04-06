@@ -1,8 +1,10 @@
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr
+  enable_dns_support = true
+  enable_dns_hostnames = true
 
   tags = {
-    Name        = "${var.environment}-vpc"
+    Name        = "${var.environment}-vpc-test"
     Environment = var.environment
   }
 }
@@ -49,20 +51,6 @@ resource "aws_security_group" "lambda_sg" {
   }
 }
 
-resource "aws_security_group" "rds_sg" {
-  name        = var.rds_sg_name
-  description = "Security group for RDS"
-  vpc_id      = aws_vpc.this.id
-}
-
-resource "aws_security_group_rule" "rds_ingress_from_lambda" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.rds_sg.id
-  source_security_group_id = aws_security_group.lambda_sg.id
-}
 
 resource "aws_security_group" "secrets_endpoint_sg" {
   name        = var.secrets_endpoint_sg_name
@@ -92,6 +80,10 @@ resource "aws_vpc_endpoint" "secretsmanager" {
   ]
 
   private_dns_enabled = true
+
+  tags = {
+    Name = "${var.environment}-secretmanager-endpoint"
+  }
 }
 
 resource "aws_vpc_endpoint" "logs" {
@@ -106,4 +98,8 @@ resource "aws_vpc_endpoint" "logs" {
   ]
 
   private_dns_enabled = true
+
+  tags = {
+    Name = "${var.environment}-logs-endpoint"
+  }
 }

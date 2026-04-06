@@ -1,10 +1,11 @@
+
 resource "random_password" "db" {
   length  = 16
   special = true
 }
 
 resource "aws_secretsmanager_secret" "db" {
-  name = "${var.project}-${var.env}-db-credentials"
+  name = "${var.project}-${var.env}-db-credential"
 }
 
 resource "aws_secretsmanager_secret_version" "db" {
@@ -39,7 +40,7 @@ resource "aws_db_instance" "this" {
   username                = var.db_username
   password                = random_password.db.result
   db_subnet_group_name    = aws_db_subnet_group.this.name
-  vpc_security_group_ids  = [var.db_security_group_id]
+  vpc_security_group_ids  = [aws_security_group.rds_sg.id]
   skip_final_snapshot     = true
   publicly_accessible     = false
   multi_az                = false
@@ -47,5 +48,40 @@ resource "aws_db_instance" "this" {
 
   tags = {
     Name = "${var.project}-${var.env}-db"
+  }
+}
+
+
+# RDS SECURITY GROUP
+
+resource "aws_security_group" "rds_sg" {
+  name   = "rds-sg"
+  vpc_id = var.vpc_id
+
+  tags = {
+    Name = "rds-${var.env}-sg"
+  }
+
+  # Lambda access
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [var.lambda_sg_id]
+  }
+
+  # Bastion access
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [var.bastion_sg_id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }

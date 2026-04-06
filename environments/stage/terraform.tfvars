@@ -22,11 +22,11 @@ env     = "stage"
 db_name     = "usersdb"
 db_username = "admin"
 
-api_name   = "user-api"
+api_name   = "user-api-stage-test"
 stage_name = "stage"
 
 bucket_name = "muskan-stage-frontend-bucket"
-artifact_bucket_name = "single-lambda-artifacts"
+artifact_bucket_name = "muskan-single-lambda-artifacts"
 
 
 oidc_provider_arn = "arn:aws:iam::364868684572:oidc-provider/token.actions.githubusercontent.com"
