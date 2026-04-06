@@ -82,8 +82,10 @@ def get_connection():
 # Lambda Handler
 # ---------------------------------------------------
 def lambda_handler(event, context):
-    logger.info("Lambda invoked")
-    logger.info(json.dumps(event))
+    request_id = context.aws_request_id
+
+    logger.info(f"[{request_id}] Lambda invoked")
+    logger.info(f"[{request_id}] Event: {json.dumps(event)}")
 
     method = event["requestContext"]["http"]["method"]
     path_params = event.get("pathParameters") or {}
@@ -95,7 +97,7 @@ def lambda_handler(event, context):
         conn = get_connection()
         cursor = conn.cursor()
     except Exception as e:
-        logger.error(f"DB connection error: {str(e)}")
+        logger.error(f"[{request_id}] DB connection error: {str(e)}")
         return response(500, {"error": "Database connection failed"})
 
     # -------------------------
@@ -121,7 +123,7 @@ def lambda_handler(event, context):
             return response(200, users)
 
         except Exception as e:
-            logger.error(f"GET error: {str(e)}")
+            logger.error(f"[{request_id}] GET error: {str(e)}")
             return response(500, {"error": "Internal server error"})
 
     # -------------------------
@@ -136,7 +138,7 @@ def lambda_handler(event, context):
             elif body is None:
                 body = {}
 
-            logger.info(f"Request {context.aws_request_id} → {body}")
+            logger.info(f"[{request_id}] Parsed body → {body}")
 
             username = body.get("username")
             email = body.get("email")
@@ -153,6 +155,8 @@ def lambda_handler(event, context):
 
             password_hash = hashlib.sha256(password.encode()).hexdigest()
 
+            logger.info(f"[{request_id}] Inserting user into DB")
+
             cursor.execute(
                 """
                 INSERT INTO users (username, email, password_hash)
@@ -161,15 +165,16 @@ def lambda_handler(event, context):
                 (username, email, password_hash)
             )
             conn.commit()
-
+            logger.info(f"[{request_id}] User created successfully")
             return response(201, {"message": "User created"})
+        
 
         except pymysql.err.IntegrityError as e:
             logger.error(f"Integrity error: {str(e)}")
             return response(400, {"error": "Email already exists"})
 
         except Exception as e:
-            logger.error(f"POST error: {str(e)}")
+            logger.error(f"[{request_id}] POST error: {str(e)}")
             return response(500, {"error": "Internal server error"})
 
     # -------------------------
@@ -196,7 +201,7 @@ def lambda_handler(event, context):
             return response(200, {"message": "User updated"})
 
         except Exception as e:
-            logger.error(f"PUT error: {str(e)}")
+            logger.error(f"[{request_id}] PUT error: {str(e)}")
             return response(500, {"error": "Internal server error"})
 
     # -------------------------
@@ -218,7 +223,7 @@ def lambda_handler(event, context):
             return response(200, {"message": "User deleted"})
 
         except Exception as e:
-            logger.error(f"DELETE error: {str(e)}")
+            logger.error(f"[{request_id}] DELETE error: {str(e)}")
             return response(500, {"error": "Internal server error"})
 
     return response(405, {"error": "Method not allowed"})
