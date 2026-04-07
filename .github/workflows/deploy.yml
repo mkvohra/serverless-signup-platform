@@ -413,5 +413,5 @@ jobs:
     uses: ./.github/workflows/terraform-component.yml
     with:
       environment: ${{ needs.resolve-environment.outputs.environment }}
-      component: cloudfront
+      component: logging
       action: apply  
