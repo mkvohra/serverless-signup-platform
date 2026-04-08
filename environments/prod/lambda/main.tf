@@ -42,7 +42,8 @@ module "lambda" {
 
   project = var.project
   env     = var.env
-
+  
+  db_secret_name_override = "serverless-signup-stage-db-credential" 
   lambda_role_arn = data.terraform_remote_state.iam.outputs.lambda_role_arn
 
   artifact_bucket = var.artifact_bucket_name

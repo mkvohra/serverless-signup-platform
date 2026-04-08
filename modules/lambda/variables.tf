@@ -26,3 +26,8 @@ variable "lambda_security_group_id" {
 variable "lambda_role_arn" {
   type = string
 }
+
+variable "db_secret_name_override" {
+  type    = string
+  default = ""
+}
