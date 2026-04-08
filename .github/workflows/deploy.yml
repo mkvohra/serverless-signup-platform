@@ -17,6 +17,10 @@ on:
         description: "S3 key of artifact to deploy"
         required: true
 
+      environments:
+        description: "Environment (dev/stage/prod)"  
+        required : true
+
 permissions:
   contents: read
   id-token: write
@@ -37,15 +41,20 @@ jobs:
     - name: Resolve environment
       id: set-env
       run: |
-        # Case 1: PR merged (dev or stage)
-        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+
+        # Case 1: Manual run (workflow_dispatch)
+        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+
+        # Case 2: PR merged (dev or stage)
+        elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
           if [[ "${{ github.base_ref }}" == "dev" ]]; then
             echo "environment=dev" >> $GITHUB_OUTPUT
           elif [[ "${{ github.base_ref }}" == "stage" ]]; then
             echo "environment=stage" >> $GITHUB_OUTPUT
           fi
 
-        # Case 2: Tag push (prod)
+        # Case 3: Tag push (prod)
         elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
           echo "environment=prod" >> $GITHUB_OUTPUT
         fi
