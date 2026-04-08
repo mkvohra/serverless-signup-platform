@@ -258,6 +258,11 @@ jobs:
         needs.detect-changes.outputs.bastion_changed == 'true'
      
       )
+      &&
+      (
+        needs.resolve-environment.outputs.environment != 'prod'
+      )
+          
     needs: [iam, networking, bastion, resolve-environment, detect-changes]
 
     uses: ./.github/workflows/terraform-component.yml
