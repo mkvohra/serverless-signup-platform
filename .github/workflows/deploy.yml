@@ -355,7 +355,7 @@ jobs:
         needs.detect-changes.outputs.iam_changed == 'true'
      
       )
-    needs: [build-lambda, s3, iam, networking, database, resolve-environment, detect-changes]
+    needs: [build-lambda, s3, iam, networking, resolve-environment, detect-changes]
 
     uses: ./.github/workflows/terraform-component.yml
     with:
