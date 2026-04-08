@@ -217,7 +217,7 @@ jobs:
         needs.detect-changes.outputs.networking_changed == 'true'
         
       )    
-    needs: [networking, resolve-environment, detect-changes]
+    needs: [resolve-environment, detect-changes]
     uses: ./.github/workflows/terraform-component.yml
     with:
       environment: ${{ needs.resolve-environment.outputs.environment }}
