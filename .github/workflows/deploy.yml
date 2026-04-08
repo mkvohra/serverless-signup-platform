@@ -17,7 +17,7 @@ on:
         description: "S3 key of artifact to deploy"
         required: true
 
-      environments:
+      environment:
         description: "Environment (dev/stage/prod)"  
         required : true
 
