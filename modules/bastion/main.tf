@@ -51,7 +51,7 @@ resource "aws_security_group" "bastion_sg" {
 
 
 # EC2 INSTANCE resource
-
+/*
 resource "aws_instance" "bastion" {
   ami                         = "ami-0f58b397bc5c1f2e8" # Amazon Linux 2 (ap-south-1, update if needed)
   instance_type               = "t3.micro"
@@ -66,7 +66,7 @@ resource "aws_instance" "bastion" {
 }
 
 
-
+*/
 # ENDPOINT SECURITY GROUP
 
 
@@ -93,7 +93,7 @@ resource "aws_security_group" "endpoint_sg" {
 
 # VPC ENDPOINTS SSM 
 
-
+/*
 resource "aws_vpc_endpoint" "ssm" {
   vpc_id            = var.vpc_id
   service_name      = "com.amazonaws.ap-south-1.ssm"
@@ -122,3 +122,4 @@ resource "aws_vpc_endpoint" "ec2messages" {
 }
 
 
+*/
