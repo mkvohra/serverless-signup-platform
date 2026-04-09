@@ -9,7 +9,7 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     const password = document.getElementById("password").value;
 
     try {
-        const res = await fetch("https://w3ap3c371l.execute-api.ap-south-1.amazonaws.com/prod/signup", {
+        const res = await fetch("https://i4trhrqq93.execute-api.ap-south-1.amazonaws.com/stage/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
