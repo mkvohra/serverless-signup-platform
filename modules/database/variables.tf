@@ -20,3 +20,8 @@ variable "db_username" {}
 variable "lambda_sg_id" {}
 
 variable "bastion_sg_id" {}
+
+variable "allowed_cidr_blocks" {
+  type    = list(string)
+  default = []
+}

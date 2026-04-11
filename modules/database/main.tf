@@ -77,6 +77,17 @@ resource "aws_security_group" "rds_sg" {
     protocol        = "tcp"
     security_groups = [var.bastion_sg_id]
   }
+  #prod lambda access
+  dynamic "ingress" {
+  for_each = length(var.allowed_cidr_blocks) > 0 ? [1] : []
+
+  content {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = var.allowed_cidr_blocks
+  }
+} 
 
   egress {
     from_port   = 0
