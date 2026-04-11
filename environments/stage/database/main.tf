@@ -19,6 +19,16 @@ data "terraform_remote_state" "bastion" {
   }
 }
 
+data "terraform_remote_state" "prod_network" {
+  backend = "s3"
+
+  config = {
+    bucket = "ssp-terraform-state-project"
+    key    = "prod/network/terraform.tfstate"
+    region = "ap-south-1"
+  }
+}
+
 
 module "database" {
   source = "../../../modules/database"
@@ -33,4 +43,8 @@ module "database" {
 
   db_name     = var.db_name
   db_username = var.db_username
+
+  allowed_cidr_blocks = [
+    data.terraform_remote_state.prod_network.outputs.vpc_cidr
+  ]
 }

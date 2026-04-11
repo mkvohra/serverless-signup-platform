@@ -65,6 +65,7 @@ resource "aws_instance" "bastion" {
   }
 }
 
+
 */
 # ENDPOINT SECURITY GROUP
 
@@ -93,7 +94,6 @@ resource "aws_security_group" "endpoint_sg" {
 # VPC ENDPOINTS SSM 
 
 /*
-
 resource "aws_vpc_endpoint" "ssm" {
   vpc_id            = var.vpc_id
   service_name      = "com.amazonaws.ap-south-1.ssm"
@@ -120,5 +120,6 @@ resource "aws_vpc_endpoint" "ec2messages" {
   security_group_ids = [aws_security_group.endpoint_sg.id]
   private_dns_enabled = true
 }
-*/
 
+
+*/

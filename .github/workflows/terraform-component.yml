@@ -29,6 +29,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Debug environment context
+        run: |
+          echo "ENV INPUT = ${{ inputs.environment }}"
+          echo "ROLE ARN = ${{ vars.AWS_PIPELINE_ROLE_ARN }}"
+          echo "REGION = ${{ vars.AWS_REGION }}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
