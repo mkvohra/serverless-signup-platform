@@ -165,7 +165,7 @@ def lambda_handler(event, context):
                 (username, email, password_hash)
             )
             conn.commit()
-            logger.info(f"[{request_id}] User created successfully")
+            #logger.info(f"[{request_id}] User created successfully") 
             return response(201, {"message": "User created"})
         
 
