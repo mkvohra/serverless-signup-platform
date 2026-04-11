@@ -17,3 +17,6 @@ output "lambda_sg_id" {
 output "secrets_endpoint_sg_id" {
   value = module.network.secrets_endpoint_sg_id
 }
+output "vpc_cidr" {
+  value = aws_vpc.main.cidr_block
+}

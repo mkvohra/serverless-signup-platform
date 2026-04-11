@@ -209,7 +209,16 @@ jobs:
       component: networking
       action: apply
 
+  
+  vpc_peering:
+    needs: [networking]
+    uses: ./.github/workflows/terraform-component.yml
+    with:
+      environment: shared
+      component: vpc-peering
+      action: apply    
 
+      
    # bastion job
 
   bastion:
